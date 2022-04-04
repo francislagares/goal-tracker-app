@@ -1,23 +1,32 @@
 import { useState } from 'react';
 import {
   Button,
-  ScrollView,
+  FlatList,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from 'react-native';
+import { v4 as uuid } from 'uuid';
+
+interface IGoal {
+  key: string;
+  text: string;
+}
 
 export default function App() {
   const [goalText, setGoalText] = useState('');
-  const [courseGoals, setCourseGoals] = useState<string[]>([]);
+  const [courseGoals, setCourseGoals] = useState<IGoal[]>([]);
 
   const goalInputHandler = (enteredText: string) => {
     setGoalText(enteredText);
   };
 
   const addGoalHandler = () => {
-    setCourseGoals(currentCourseGoals => [...currentCourseGoals, goalText]);
+    setCourseGoals(currentCourseGoals => [
+      ...currentCourseGoals,
+      { text: goalText, key: uuid() },
+    ]);
   };
 
   return (
@@ -31,13 +40,20 @@ export default function App() {
         <Button title='Add Goal' onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsContainer}>
-        <ScrollView>
-          {courseGoals.map(goal => (
-            <View style={styles.goalItem} key={goal}>
-              <Text style={styles.goalText}>{goal}</Text>
-            </View>
-          ))}
-        </ScrollView>
+        <FlatList
+          data={courseGoals}
+          renderItem={itemData => {
+            return (
+              <View style={styles.goalItem}>
+                <Text style={styles.goalText}>{itemData.item.text}</Text>
+              </View>
+            );
+          }}
+          keyExtractor={(item, index) => {
+            return item.key;
+          }}
+          alwaysBounceVertical={false}
+        />
       </View>
     </View>
   );
