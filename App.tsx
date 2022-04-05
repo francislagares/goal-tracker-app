@@ -1,13 +1,7 @@
 import { useState } from 'react';
-import {
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Button, FlatList, StyleSheet, TextInput, View } from 'react-native';
 import { v4 as uuid } from 'uuid';
+import GoalItem from './components/GoalItem';
 
 interface IGoal {
   key: string;
@@ -43,11 +37,7 @@ export default function App() {
         <FlatList
           data={courseGoals}
           renderItem={itemData => {
-            return (
-              <View style={styles.goalItem}>
-                <Text style={styles.goalText}>{itemData.item.text}</Text>
-              </View>
-            );
+            return <GoalItem text={itemData.item.text} />;
           }}
           keyExtractor={(item, index) => {
             return item.key;
