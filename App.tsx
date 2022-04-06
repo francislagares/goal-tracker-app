@@ -5,7 +5,7 @@ import GoalInput from './components/GoalInput';
 import GoalItem from './components/GoalItem';
 
 interface IGoal {
-  key: string;
+  id: string;
   text: string;
 }
 
@@ -15,8 +15,14 @@ export default function App() {
   const addGoalHandler = (goalText: string) => {
     setCourseGoals(currentCourseGoals => [
       ...currentCourseGoals,
-      { text: goalText, key: uuid() },
+      { text: goalText, id: uuid() },
     ]);
+  };
+
+  const deleteGoalHandler = (id: string) => {
+    setCourseGoals(currentCourseGoals => {
+      return currentCourseGoals.filter(goal => goal.id !== id);
+    });
   };
 
   return (
@@ -26,10 +32,16 @@ export default function App() {
         <FlatList
           data={courseGoals}
           renderItem={itemData => {
-            return <GoalItem text={itemData.item.text} />;
+            return (
+              <GoalItem
+                text={itemData.item.text}
+                id={itemData.item.id}
+                onDeleteGoal={deleteGoalHandler}
+              />
+            );
           }}
           keyExtractor={(item, index) => {
-            return item.key;
+            return item.id;
           }}
           alwaysBounceVertical={false}
         />

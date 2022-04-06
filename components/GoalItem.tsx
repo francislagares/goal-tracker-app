@@ -1,14 +1,18 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 interface IProps {
+  id: string;
   text: string;
+  onDeleteGoal: (id: string) => void;
 }
 
-export const GoalItem = ({ text }: IProps) => {
+export const GoalItem = ({ text, onDeleteGoal, id }: IProps) => {
   return (
-    <View style={styles.goalItem}>
-      <Text style={styles.goalText}>{text}</Text>
-    </View>
+    <Pressable onPress={onDeleteGoal.bind(this, id)}>
+      <View style={styles.goalItem}>
+        <Text style={styles.goalText}>{text}</Text>
+      </View>
+    </Pressable>
   );
 };
 
